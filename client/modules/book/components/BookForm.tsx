@@ -1,25 +1,133 @@
 "use client";
 
 import React, { useState } from "react";
-import { Calendar, Clock, User } from "lucide-react";
+import { AlertCircle, Calendar, CheckCircle, Clock, User } from "lucide-react";
 import { RESOURCES } from "../utils/data";
+import { BookFormDataType } from "../type";
+
+const initialState: BookFormDataType = {
+  resource: "",
+  startTime: "",
+  endTime: "",
+  requestedBy: "",
+};
 
 export const BookForm = () => {
   const [loading, setLoading] = useState(false);
+  const [bookFormData, setBookFormData] = useState(initialState);
+  const [message, setMessage] = useState({ type: "", text: "" });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setBookFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name == "startTime" && value) {
+      const start_time = new Date(value);
+      const end_time = new Date(start_time.getTime() + 60 * 60 * 1000); // Add 1 hour
+      setBookFormData((prev) => ({
+        ...prev,
+        endTime: end_time.toISOString()?.slice(0, 16),
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const { resource, startTime, endTime, requestedBy } = bookFormData;
+
+    if (!resource || !startTime || !endTime || !requestedBy) {
+      setMessage({ type: "error", text: "All fields are required" });
+      return false;
+    }
+
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    const now = new Date();
+
+    if (start <= now) {
+      setMessage({ type: "error", text: "Start time must be in the future" });
+      return false;
+    }
+
+    if (end <= start) {
+      setMessage({ type: "error", text: "End time must be after start time" });
+      return false;
+    }
+
+    const durationMinutes = (Number(end) - Number(start)) / (1000 * 60);
+    if (durationMinutes < 15) {
+      setMessage({
+        type: "error",
+        text: "Booking duration must be at least 15 minutes",
+      });
+      return false;
+    }
+
+    if (durationMinutes > 120) {
+      setMessage({
+        type: "error",
+        text: "Booking duration cannot exceed 2 hours",
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO:
+
+    setMessage({ type: "", text: "" });
+
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      console.log("bookFormData", bookFormData);
+      setMessage({ type: "success", text: "Booking created successfully!" });
+      setTimeout(() => {
+        setMessage({ type: "", text: "" });
+        setBookFormData(initialState);
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <>
+      {message.text && (
+        <div
+          className={`mb-6 p-4 rounded-lg flex items-center space-x-2 ${
+            message.type == "error"
+              ? "bg-red-50 text-red-800"
+              : "bg-green-50 text-green-800"
+          }`}
+        >
+          {message.type == "error" ? (
+            <AlertCircle className="h-5 w-5" />
+          ) : (
+            <CheckCircle className="h-5 w-5" />
+          )}
+          <span>{message.text}</span>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="card space-y-6">
         <div>
           <label className="form-label">
             <Calendar className="inline h-4 w-4 mr-1" />
             Resource
           </label>
-          <select name="resource" className="form-input" required>
+          <select
+            value={bookFormData.resource}
+            onChange={handleInputChange}
+            name="resource"
+            className="form-input"
+            required
+          >
             <option value="">Select a resource</option>
             {RESOURCES.map((resource) => (
               <option key={resource} value={resource}>
@@ -38,6 +146,8 @@ export const BookForm = () => {
             <input
               type="datetime-local"
               name="startTime"
+              value={bookFormData.startTime}
+              onChange={handleInputChange}
               className="form-input"
               required
             />
@@ -51,6 +161,8 @@ export const BookForm = () => {
             <input
               type="datetime-local"
               name="endTime"
+              value={bookFormData.endTime}
+              onChange={handleInputChange}
               className="form-input"
               required
             />
@@ -75,6 +187,8 @@ export const BookForm = () => {
           <input
             type="text"
             name="requestedBy"
+            value={bookFormData.requestedBy}
+            onChange={handleInputChange}
             placeholder="Enter your name"
             className="form-input"
             required
