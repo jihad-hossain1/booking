@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { AlertCircle, Calendar, CheckCircle, Clock, User } from "lucide-react";
 import { RESOURCES } from "../utils/data";
 import { BookFormDataType } from "../type";
+import { formatDuration } from "../utils/format-duration";
 
 const initialState: BookFormDataType = {
   resource: "",
@@ -15,6 +16,7 @@ const initialState: BookFormDataType = {
 export const BookForm = () => {
   const [loading, setLoading] = useState(false);
   const [bookFormData, setBookFormData] = useState(initialState);
+  const [resources, setResources] = useState(RESOURCES);
   const [message, setMessage] = useState({ type: "", text: "" });
 
   const handleInputChange = (
@@ -85,6 +87,7 @@ export const BookForm = () => {
     setLoading(true);
     try {
       console.log("bookFormData", bookFormData);
+      // TODO: send to data in server
       setMessage({ type: "success", text: "Booking created successfully!" });
       setTimeout(() => {
         setMessage({ type: "", text: "" });
@@ -96,6 +99,24 @@ export const BookForm = () => {
       setLoading(false);
     }
   };
+
+  const handleDefaultTimeSet = React.useCallback(() => {
+    const now = new Date();
+    now.setHours(now.getHours() + 1, 0, 0, 0);
+    const defaultStart = now.toISOString().slice(0, 16);
+    now.setHours(now.getHours() + 1);
+    const defaultEnd = now.toISOString().slice(0, 16);
+
+    setBookFormData((prev) => ({
+      ...prev,
+      startTime: defaultStart,
+      endTime: defaultEnd,
+    }));
+  }, []);
+
+  React.useEffect(() => {
+    handleDefaultTimeSet();
+  }, []);
 
   return (
     <>
@@ -129,7 +150,7 @@ export const BookForm = () => {
             required
           >
             <option value="">Select a resource</option>
-            {RESOURCES.map((resource) => (
+            {resources.map((resource) => (
               <option key={resource} value={resource}>
                 {resource}
               </option>
@@ -171,7 +192,8 @@ export const BookForm = () => {
 
         <div className="bg-blue-50 p-3 rounded-lg">
           <p className="text-sm text-blue-800">
-            <strong>Duration:</strong> 1 Hour
+            <strong>Duration:</strong>{" "}
+            {formatDuration(bookFormData.startTime, bookFormData.endTime)}
           </p>
           <p className="text-xs text-blue-600 mt-1">
             Remember: 10-minute buffer time will be added before and after your
