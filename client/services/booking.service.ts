@@ -4,10 +4,10 @@ import { BookingRequest } from "./type";
 
 type QueryProps = {
     query?: string;
+    date?: string | Date;
 };
 
 class BookingService {
-    
     // create booking
     async create(requestBody: BookingRequest) {
         const { resource, startTime, endTime, requestedBy } = requestBody;
@@ -67,8 +67,34 @@ class BookingService {
 
     // get all bookings
     async getBookings(query: QueryProps) {
+        console.log("🚀 ~ BookingService ~ getBookings ~ query?.date:", query?.date)
+
+        let where = {} as unknown as {
+            resource?: string;
+            startTime?: {
+                gte?: Date;
+                lte?: Date;
+            };
+        };
+
+        if (query?.query) {
+            where.resource = query.query;
+        }
+        
+        if (query?.date) {
+            const startOfDay = new Date(query?.date);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(query?.date);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            where.startTime = {
+                gte: startOfDay,
+                lte: endOfDay,
+            };
+        }
         try {
             const bookings = await prisma.booking.findMany({
+                where,
                 orderBy: {
                     startTime: "asc",
                 },
@@ -121,7 +147,7 @@ class BookingService {
             return {
                 success: true,
                 data: booking,
-            }
+            };
         } catch (error) {
             console.error((error as Error).message);
             return { error: (error as Error).message, success: false };

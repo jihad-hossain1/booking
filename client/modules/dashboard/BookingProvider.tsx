@@ -16,6 +16,7 @@ export const initialState: State = {
   bookings: [],
   filter: {
     query: "",
+    date: "",
   },
   sort: {
     column: "createdAt",

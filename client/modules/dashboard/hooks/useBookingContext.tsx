@@ -11,15 +11,18 @@ export const useBookingContext = () => {
   const filter = React.useMemo(() => state.filter, [state.filter]);
 
   const updateFilter = React.useCallback(
-    (filter: { query?: string }) => {
+    (newFilter: { query?: string ,date?: string}) => {
       dispatch({
         type: "UPDATE_STATE",
         payload: {
-          filter,
+          filter: {
+            ...state.filter,
+            ...newFilter,
+          },
         },
       });
     },
-    [dispatch]
+    [dispatch, state.filter]
   );
 
   const resetFilter = React.useCallback(() => {
