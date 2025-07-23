@@ -9,7 +9,7 @@ const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/booking`;
 
 export const useFetchBooking = () => {
   const { filter, dispatch } = useBookingContext();
-  const apiUrl = `${baseUrl}?query=${filter?.query}`;
+  const apiUrl = `${baseUrl}?query=${filter?.query}&date=${filter?.date}`;
 
   const { data, error, mutate, isLoading } = useSWR(apiUrl, fetcher, {
     revalidateOnFocus: false,

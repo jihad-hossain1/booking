@@ -5,6 +5,7 @@ import { BookingType } from "../type";
 import { Clock, User } from "lucide-react";
 import { formatDateTime, getBookingStatus, getStatusBadge } from "../utils";
 import { DeleteAction } from "./actions/DeleteAction";
+import { BookingFilter } from "./BookingFilter";
 
 type BookingTableProps = {
   bookings: BookingType[];
@@ -23,12 +24,13 @@ export const BookingTable = (props: BookingTableProps) => {
   };
   return (
     <>
+      <BookingFilter />
       <div>{renderBooking()}</div>
     </>
   );
 };
 
-const Bookings = ({ bookings,refetch }: { bookings: BookingType[]; refetch: ()=>void }) => {
+const Bookings = ({ bookings, refetch }: { bookings: BookingType[]; refetch: () => void }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {bookings?.map((booking) => {
@@ -57,7 +59,7 @@ const Bookings = ({ bookings,refetch }: { bookings: BookingType[]; refetch: ()=>
                   </span>
                 </div>
               </div>
-             <DeleteAction id={booking.id} mutate={refetch} /> 
+              <DeleteAction id={booking.id} mutate={refetch} />
             </div>
           </div>
         );

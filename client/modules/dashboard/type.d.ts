@@ -15,6 +15,7 @@ export type State = {
   bookings: BookingType[];
   filter: {
     query?: string;
+    date?: Date | string;
   };
   sort: {
     column: SortColumn;

@@ -4,10 +4,12 @@ import { NextResponse, NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query");
+    const date = searchParams.get("date");
 
     try {
         const bookings = await bookingService.getBookings({
             query: query || "",
+            date: date || "",
         });
         return NextResponse.json(bookings);
     } catch (error) {
