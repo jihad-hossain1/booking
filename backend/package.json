@@ -9,7 +9,8 @@
     "build": "tsc && tsc-alias",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "vercel-build": "prisma generate && prisma migrate deploy && npm run build"
   },
   "prisma": {
     "schema": "./prisma"

@@ -1,0 +1,62 @@
+# Dependencies
+node_modules
+
+# TypeScript source files
+src/
+
+# Development files
+.env.local
+.env.development
+.env.test
+
+# Build artifacts
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file (keep .env for production)
+# .env
+
+# Prisma migrations (if using file-based migrations)
+prisma/migrations/
+
+# Test files
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts

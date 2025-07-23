@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
     res.send(" <-Booking API is running ->");
 });
 app.use("/api/v1/booking", booking_route_1.default);
-const port = process.env.PORT || 7000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// Export the app for Vercel serverless deployment
+module.exports = app;
+exports.default = app;

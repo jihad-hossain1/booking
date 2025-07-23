@@ -11,5 +11,14 @@
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
-  ]
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url"
+  },
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "installCommand": "npm install && npx prisma generate"
 }
