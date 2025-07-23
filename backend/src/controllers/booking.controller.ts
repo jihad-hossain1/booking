@@ -1,0 +1,30 @@
+import { Request, Response } from "express";
+import bookingService from "services/booking.service";
+
+class BookingController {
+  async createBooking(req: Request, res: Response) {
+    try {
+      const booking = await bookingService.create(req.body);
+      return res.status(201).json(booking);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: (error as Error).message,
+      });
+    }
+  }
+
+  async getBookings(req: Request, res: Response) {
+    try {
+      const bookings = await bookingService.getBookings(req.query);
+      return res.status(200).json(bookings);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: (error as Error).message,
+      });
+    }
+  }
+}
+
+export default new BookingController();
