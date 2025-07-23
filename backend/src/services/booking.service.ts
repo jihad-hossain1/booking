@@ -7,20 +7,27 @@ class BookingService {
     const { resource, startTime, endTime, requestedBy } = requestBody;
 
     if (!resource || !startTime || !endTime || !requestedBy)
-      return { error: "All fields are required" };
+      return { error: "All fields are required", success: false };
 
     const start = new Date(startTime);
     const end = new Date(endTime);
 
-    if (end <= start) return { error: "End time must be after start time" };
+    if (end <= start)
+      return { error: "End time must be after start time", success: false };
 
     const durationMinutes = (Number(end) - Number(start)) / (1000 * 60);
 
     if (durationMinutes < 15)
-      return { error: "Booking duration must be at least 15 minutes" };
+      return {
+        error: "Booking duration must be at least 15 minutes",
+        success: false,
+      };
 
     if (durationMinutes > 120)
-      return { error: "Booking duration cannot exceed 2 hours" };
+      return {
+        error: "Booking duration cannot exceed 2 hours",
+        success: false,
+      };
 
     try {
       const existingBookings = await prisma.booking.findMany({
@@ -33,20 +40,25 @@ class BookingService {
         return {
           error:
             "Booking conflicts with existing reservation (including 10-minute buffer)",
+          success: false,
         };
       }
 
       const booking = await prisma.booking.create({
         data: {
           resource,
-          startTime,
-          endTime,
+          startTime: new Date(startTime).toISOString(),
+          endTime: new Date(endTime).toISOString(),
           requestedBy,
         },
       });
-      return booking;
+      return {
+        success: true,
+        data: booking,
+      };
     } catch (error) {
-      throw (error as Error).message;
+      console.error((error as Error).message);
+      return { error: "Internal server error", success: false };
     }
   }
 

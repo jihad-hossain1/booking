@@ -30,7 +30,7 @@ export const BookForm = () => {
       const end_time = new Date(start_time.getTime() + 60 * 60 * 1000); // Add 1 hour
       setBookFormData((prev) => ({
         ...prev,
-        endTime: end_time.toISOString()?.slice(0, 16),
+        endTime: end_time.toISOString(),
       }));
     }
   };
@@ -77,7 +77,7 @@ export const BookForm = () => {
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setMessage({ type: "", text: "" });
@@ -86,15 +86,33 @@ export const BookForm = () => {
 
     setLoading(true);
     try {
-      console.log("bookFormData", bookFormData);
-      // TODO: send to data in server
-      setMessage({ type: "success", text: "Booking created successfully!" });
-      setTimeout(() => {
-        setMessage({ type: "", text: "" });
-        setBookFormData(initialState);
-      }, 2000);
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resource: bookFormData.resource,
+          startTime: bookFormData.startTime,
+          endTime: bookFormData.endTime,
+          requestedBy: bookFormData.requestedBy,
+        }),
+      });
+      const data = await res.json();
+
+      if (data?.success) {
+        setMessage({ type: "success", text: "Booking created successfully!" });
+        setTimeout(() => {
+          setMessage({ type: "", text: "" });
+          setBookFormData(initialState);
+        }, 2000);
+      } else {
+        setMessage({ type: "error", text: data?.error });
+      }
     } catch (error) {
       console.error(error);
+      setLoading(false);
+      setMessage({ type: "error", text: "Internal server error" });
     } finally {
       setLoading(false);
     }
