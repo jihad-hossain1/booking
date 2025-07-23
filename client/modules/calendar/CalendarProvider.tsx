@@ -14,7 +14,7 @@ export const CalenderBookContext = createContext<BookingContextType>(
 
 export const initialState: State = {
   bookings: [],
-  currentWeek: new Date()
+  currentWeek: new Date(),
 };
 
 const reducer = (state: State, action: Action): State => {

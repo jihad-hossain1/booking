@@ -6,10 +6,10 @@ export const Header = () => {
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 max-sm:text-sm">
             Resource Booking App.
           </h1>
-          <nav className="flex space-x-4">
+          <nav className="flex  max-sm:text-xs space-x-2 md:space-x-4 ">
             <Link
               href="/"
               className="text-primary-600 hover:text-primary-700 font-medium"
