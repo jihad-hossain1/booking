@@ -26,8 +26,8 @@ export const useFetchBooking = () => {
       dispatch({
         type: "UPDATE_STATE",
         payload: {
-          bookings: data?.data || [],
-          totalPages: data?.totalPages || 1,
+          bookings: data || [],
+          totalPages: 0,
         },
       });
     }
