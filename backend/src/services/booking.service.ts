@@ -1,5 +1,5 @@
-import prisma from "lib/prisma";
-import { BookingType } from "lib/schemas/type";
+import prisma from "@/lib/prisma";
+import { BookingType } from "@/lib/schemas/type";
 import { BookingRequest } from "./type";
 
 type QueryProps = {
