@@ -1,13 +1,28 @@
-import prisma from "@/prisma";
+import bookingService from "@/services/booking.service";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("query");
+
     try {
-        const bookings = await prisma.booking.findMany();
-        return NextResponse.json({
-            success: true,
-            data: bookings,
+        const bookings = await bookingService.getBookings({
+            query: query || "",
         });
+        return NextResponse.json(bookings);
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: error,
+        });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    const requestBody = await req.json();
+    try {
+        const booking = await bookingService.create(requestBody);
+        return NextResponse.json(booking);
     } catch (error) {
         return NextResponse.json({
             success: false,
