@@ -7,8 +7,5 @@
       "maxDuration": 30
     }
   },
-  "installCommand": "npm install && npx prisma generate",
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  "installCommand": "npm install && npx prisma generate"
 }
