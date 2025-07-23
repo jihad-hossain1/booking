@@ -14,8 +14,14 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/booking", bookingRouter);
 
-const port = process.env.PORT || 7000;
+// Export the app for Vercel serverless deployment
+module.exports = app;
+exports.default = app;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 7000;
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}

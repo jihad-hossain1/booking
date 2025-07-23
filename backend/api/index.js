@@ -1,7 +1,6 @@
 const app = require("../public/index.js");
 
-const handler = async (req, res) => {
-  return app.default(req, res);
-};
+// Handle both CommonJS and ES module exports
+const expressApp = app.default || app;
 
-module.exports = handler;
+module.exports = expressApp;
