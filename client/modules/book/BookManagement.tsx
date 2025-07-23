@@ -1,10 +1,11 @@
 import React from "react";
 import { BookFooter } from "./components/BookFooter";
 import { BookForm } from "./components/BookForm";
+import { Container } from "@/components/ui/container";
 
 export const BookManagement = () => {
   return (
-    <div className="max-w-2xl mx-auto">
+    <Container>
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Create New Booking
@@ -16,8 +17,7 @@ export const BookManagement = () => {
       </div>
 
       <BookForm />
-
       <BookFooter />
-    </div>
+    </Container>
   );
 };

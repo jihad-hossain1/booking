@@ -13,6 +13,18 @@ class BookingController {
       });
     }
   }
+
+  async getBookings(req: Request, res: Response) {
+    try {
+      const bookings = await bookingService.getBookings(req.query);
+      return res.status(200).json(bookings);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: (error as Error).message,
+      });
+    }
+  }
 }
 
 export default new BookingController();

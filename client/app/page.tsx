@@ -1,9 +1,12 @@
-import React from 'react'
+import { DashboardManage } from "@/modules/dashboard/DashboardManage";
+import React from "react";
 
 const page = () => {
   return (
-    <div className='text-3xl font-bold text-red-400'>page</div>
-  )
-}
+    <>
+      <DashboardManage />
+    </>
+  );
+};
 
-export default page
+export default page;

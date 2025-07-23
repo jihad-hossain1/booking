@@ -2,6 +2,11 @@ import prisma from "lib/prisma";
 import { BookingType } from "lib/schemas/type";
 import { BookingRequest } from "./type";
 
+type QueryProps = {
+  page?: string;
+  limit?: string;
+};
+
 class BookingService {
   async create(requestBody: BookingRequest) {
     const { resource, startTime, endTime, requestedBy } = requestBody;
@@ -55,6 +60,23 @@ class BookingService {
       return {
         success: true,
         data: booking,
+      };
+    } catch (error) {
+      console.error((error as Error).message);
+      return { error: "Internal server error", success: false };
+    }
+  }
+
+  async getBookings(query: QueryProps) {
+    try {
+      const bookings = await prisma.booking.findMany({
+        orderBy: {
+          startTime: "asc",
+        },
+      });
+      return {
+        success: true,
+        data: bookings,
       };
     } catch (error) {
       console.error((error as Error).message);
