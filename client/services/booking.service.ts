@@ -67,7 +67,6 @@ class BookingService {
 
     // get all bookings
     async getBookings(query: QueryProps) {
-        console.log("🚀 ~ BookingService ~ getBookings ~ query?.date:", query?.date)
 
         let where = {} as unknown as {
             resource?: string;
@@ -99,10 +98,7 @@ class BookingService {
                     startTime: "asc",
                 },
             });
-            return {
-                success: true,
-                data: bookings,
-            };
+            return bookings
         } catch (error) {
             console.error((error as Error).message);
             return { error: "Internal server error", success: false };
