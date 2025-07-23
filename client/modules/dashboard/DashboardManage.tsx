@@ -21,8 +21,10 @@ const BookingContent = () => {
   return (
     <section className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Booking Dashboard</h1>
-        <Link href="/book" className="btn-primary">
+        <h1 className="text-3xl max-sm:text-sm font-bold text-gray-900">
+          Booking Dashboard
+        </h1>
+        <Link href="/book" className="btn-primary max-sm:text-xs">
           New Booking
         </Link>
       </div>
