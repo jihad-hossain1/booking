@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import bookingService from "services/booking.service";
+import bookingService from "@/services/booking.service";
 
 class BookingController {
   async createBooking(req: Request, res: Response) {
