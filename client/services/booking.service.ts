@@ -7,6 +7,8 @@ type QueryProps = {
 };
 
 class BookingService {
+    
+    // create booking
     async create(requestBody: BookingRequest) {
         const { resource, startTime, endTime, requestedBy } = requestBody;
 
@@ -63,6 +65,7 @@ class BookingService {
         }
     }
 
+    // get all bookings
     async getBookings(query: QueryProps) {
         try {
             const bookings = await prisma.booking.findMany({
@@ -80,6 +83,52 @@ class BookingService {
         }
     }
 
+    // remove booking by id
+    async deleteBooking(id: string) {
+        // validate object id
+        try {
+            const isBooking = await this.getBooking(id);
+            if (!isBooking?.success) return { ...isBooking };
+
+            const booking = await prisma.booking.delete({
+                where: {
+                    id,
+                },
+            });
+            return {
+                success: true,
+                data: booking,
+            };
+        } catch (error) {
+            console.error((error as Error).message);
+            return { error: "Internal server error", success: false };
+        }
+    }
+
+    // get booking by id
+    async getBooking(id: string) {
+        // validate object id
+        try {
+            const isBooking = this.validateObjectId(id);
+            if (!isBooking) return { error: "Booking id invalid", success: false };
+
+            const booking = await prisma.booking.findFirst({
+                where: {
+                    id,
+                },
+            });
+            if (!booking) return { error: "Booking not found", success: false };
+            return {
+                success: true,
+                data: booking,
+            }
+        } catch (error) {
+            console.error((error as Error).message);
+            return { error: (error as Error).message, success: false };
+        }
+    }
+
+    // check if booking has conflict
     hasConflict(newStart: Date, newEnd: Date, existingBookings: BookingType[]) {
         const BUFFER_MINUTES = 10;
 
@@ -98,6 +147,12 @@ class BookingService {
         }
 
         return false;
+    }
+
+    // validate object id
+    validateObjectId(id: string) {
+        const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+        return objectIdRegex.test(id);
     }
 }
 
