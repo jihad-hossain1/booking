@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "public/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "node api/index.js",
     "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
-    "build": "tsc && tsc-alias",
+    "build": "npx prisma generate && tsc && tsc-alias",
     "vercel-build": "npx prisma generate && npm run build",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
