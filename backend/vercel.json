@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "public",
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "installCommand": "npm install && npx prisma generate",
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
+}

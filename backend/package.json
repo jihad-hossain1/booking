@@ -7,6 +7,7 @@
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/index.ts",
     "build": "tsc && tsc-alias",
+    "vercel-build": "npx prisma generate && npm run build",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
