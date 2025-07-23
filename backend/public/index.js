@@ -15,8 +15,12 @@ app.get("/", (req, res) => {
     res.send(" <-Booking API is running ->");
 });
 app.use("/api/v1/booking", booking_route_1.default);
-const port = process.env.PORT || 7000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+module.exports = app;
+exports.default = app;
+if (process.env.NODE_ENV !== 'production') {
+    const port = process.env.PORT || 7000;
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
 //# sourceMappingURL=index.js.map
